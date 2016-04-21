@@ -72,6 +72,10 @@ servico(18,oncologia,ipo_coimbra,coimbra).
 % BASE DE CONHECIMENTO SOBRE OS UTENTES -------------------------------------------------------------------------------------------
 % utente: #IdUt, Nome, Idade, Morada -> {V, F, D}
 
+-utente( U,N,I,M ) :-
+    nao( utente( U,N,I,M ) ),
+    nao( excecao( utente( U,N,I,M ) ) ).
+
 utente(1,joao_castro, 23, lisboa).
 utente(2,alberto_antonio, 99, porto).
 utente(3,rafael_carvalho, 21, viana_do_castelo).
