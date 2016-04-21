@@ -177,11 +177,31 @@ excecao( utente(14, sofia_martins, 15, aveiro).
 % BASE DE CONHECIMENTO SOBRE AS CONSULTAS
 % consulta: Data, #IdUt,#Serv,Custo -> {V,F,D}
 
+-consulta( D,U,S,C ) :-
+    nao( consulta( U,N,I,M ) ),
+    nao( excecao( consulta( U,N,I,M ) ) ).
+
+-data( D,M,A ) :- 
+    nao( data(D,M,A) ),
+    nao( excecao( data (D,M,A))).
+
+% Invariante Estrutural:  nao permitir a insercao de conhecimento
+%                         repetido
+
++consulta( D,U,S,C ) :: (solucoes( (D,U,S,C),(consulta( D,U,S,C )),S ),
+                  comprimento( S,N ), N == 1
+                  ).
+
+
+% Conhecimento Perfeito
+
 consulta(data(20,03,2016), 4, 1, 25).
 consulta(data(16,05,2015), 7, 5, 30).
 consulta(data(15,08,2015), 13, 18, 50).
 consulta(data(30,01,2016), 5, 15, 30).
 consulta(data(07,02,2016), 1, 12, 70).
+
+
 consulta(data(02,09,2015), 20, 8, 20).
 consulta(data(18,10,2015), 17, 10, 40).
 consulta(data(23,11,2015), 8, 14, 35).
