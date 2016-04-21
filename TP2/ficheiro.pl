@@ -117,6 +117,15 @@ excecao(servico(15,radiologia,hospital_viana_do_castelo,braga)).
     nao( utente( U,N,I,M ) ),
     nao( excecao( utente( U,N,I,M ) ) ).
 
+% Invariante Estrutural:  nao permitir a insercao de conhecimento
+%                         repetido
+
++utente( U,N,I,M ) :: (solucoes( (U,N,I,M),(utente( U,N,I,M )),S ),
+                  comprimento( S,N ), N == 1
+                  ).
+
+% Conhecimento perfeito
+
 utente(1,joao_castro, 23, lisboa).
 utente(2,alberto_antonio, 99, porto).
 utente(3,rafael_carvalho, 21, viana_do_castelo).
@@ -127,16 +136,43 @@ utente(7,andre_almeida, 24, lisboa).
 utente(8,bernardo_silva, 26, viana_do_castelo).
 utente(9,maria_castro, 32, porto).
 utente(10,nelson_semedo, 30, braga).
-utente(11,noemia_ferreira, 18, lisboa).
-utente(12,carlota_santos, 20, viana_do_castelo).
-utente(13,ana_rodrigues, 21, porto).
-utente(14,sofia_martins, 15, braga).
-utente(15,miguel_belo, 2, viana_do_castelo).
-utente(16,guilherme_cabral, 69, viana_do_castelo).
 utente(17,luis_pereira, 72, lisboa).
 utente(18,joana_costa, 37, porto).
 utente(19,andre_vilaca, 25, braga).
 utente(20,patricia_afonso, 23, viana_do_castelo).
+
+% Conhecimento Imperfeito Incerto(Parametros desconhecidos)
+
+utente(11,noemia_ferreira, 18, xptoc).
+utente(12,carlota_santos, xptoi, viana_do_castelo).
+
+excecao( utente( U,N,I,M ) ) :- utente (U,N,I,xptoc).
+excecao( utente( U,N,I,M ) ) :- utente (U,N,xptoi,M).
+
+nulo(xptoc).
+nulo(xptoi).
+
+% Conhecimento Imperfeito Impreciso
+
+-utente(13,ana_rodrigues, 21, porto).
+excecao( utente(13, ana_rodrigues, 22, porto)).
+excecao( utente(13, ana_rodrigues, 23, porto)).
+
+-utente(14,sofia_martins, 15, braga).
+excecao( utente(14, sofia_martins, 15, vila_real).
+excecao( utente(14, sofia_martins, 15, aveiro).
+
+% Conhecimento Imperfeito Interdito
+
++utente( U,N,I,M ) :: (solucoes( (U,N,I,M),(utente(15,miguel_belo,I,viana_do_castelo),nao(nulo(I))),S ),
+                  comprimento( S,N ), N == 0 
+                  ).
+
+
++utente( U,N,I,M ) :: (solucoes( (U,N,I,M),(utente(16,guilherme_cabral,69,M),nao(nulo(M))),S ),
+                  comprimento( S,N ), N == 0 
+                  ).
+
 
 % BASE DE CONHECIMENTO SOBRE AS CONSULTAS
 % consulta: Data, #IdUt,#Serv,Custo -> {V,F,D}
