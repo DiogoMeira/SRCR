@@ -49,6 +49,7 @@ demo( Questao,desconhecido ) :-
 +servico( S,D,I,C ) :: (solucoes( (S,D,I,C),(servico( S,D,I,C )),S ),
                   comprimento( S,N ), N == 1
                   ).
+% conhecimento perfeito
 
 servico(1,oftalmologia,hospital_braga,braga).
 servico(2,dermatologia,hospital_braga,braga).
@@ -59,15 +60,55 @@ servico(6,cirurgia_geral,hospital_sao_joao,porto).
 servico(7,pediatria,hospital_santa_maria,lisboa).
 servico(8,cardiologia,hospital_santa_maria,lisboa).
 servico(9,psiquiatria,hospital_santa_maria,lisboa).
-servico(10,cardiologia,hospital_da_luz,lisboa).
-servico(11,oncologia,hospital_da_luz,lisboa).
-servico(12,pediatria,hospital_da_luz,lisboa).
-servico(13,psiquiatria,hospital_santo_antonio,porto).
-servico(14,cirurgia_geral,hospital_santo_antonio,porto).
-servico(15,radiologia,hospital_viana_do_castelo,porto).
-servico(16,dermatologia,hospital_viana_do_castelo,viana_do_castelo).
-servico(17,psiquiatria,centro_saude_perre,viana_do_castelo).
-servico(18,oncologia,ipo_coimbra,coimbra).
+
+%Conhecimento imperfeito incerto
+
+servico(10,cardiologia,xpto1,lisboa).
+excecao(servico(S,D,I,C)) :- 
+    servico(S,D,xpto1,C).
+nulo(xpto1).
+
+servico(11,xpto2,hospital_da_luz,lisboa).
+excecao(servico(S,D,I,C)) :- 
+    servico(S,xpto2,I,C).
+nulo(xpto2).
+
+servico(12,pediatria,hospital_da_luz,xpto3).
+excecao(servico(S,D,I,C)) :- 
+    servico(S,D,I,xpto3).
+nulo(xpto3).
+
+
+%Conhecimento imperfeito impreciso
+excecao(servico(13,psiquiatria,hospital_santo_antonio,porto)).
+excecao(servico(13,psiquiatria,hospital_sao_joao,porto)).
+
+
+excecao(servico(14,cirurgia_geral,hospital_santo_antonio,porto)).
+excecao(servico(14,cirurgia_geral,hospital_santo_antonio,lisboa)).
+
+
+-servico(15,radiologia,hospital_viana_do_castelo,porto).
+excecao(servico(15,radiologia,hospital_viana_do_castelo,viana_do_castelo)).
+excecao(servico(15,radiologia,hospital_viana_do_castelo,braga)).
+
+
+
+%Conhecimento imperfeito interdito
+
++servico( S,D,I,C ) :: (solucoes( (S,Ds,I,C),(servico(16,Ds,hospital_viana_do_castelo,viana_do_castelo),nao(nulo(Ds))),S ),
+                  comprimento( S,N ), N == 0 
+                  ).
+
++servico( S,D,I,C ) :: (solucoes( (S,D,Is,C),(servico(17,psiquiatria,Is,viana_do_castelo),nao(nulo(Is))),S ),
+                  comprimento( S,N ), N == 0 
+                  ).
+
++servico( S,D,I,C ) :: (solucoes( (S,D,I,Cs),(servico(18,oncologia,ipo_coimbra,Cs),nao(nulo(Cs))),S ),
+                  comprimento( S,N ), N == 0 
+                  ).
+
+
 
 % BASE DE CONHECIMENTO SOBRE OS UTENTES -------------------------------------------------------------------------------------------
 % utente: #IdUt, Nome, Idade, Morada -> {V, F, D}
