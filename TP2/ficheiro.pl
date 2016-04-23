@@ -18,6 +18,38 @@ nao( Questao ) :-
     Questao, !, fail.
 nao( Questao ).
 
+teste( [] ).
+teste( [R|LR] ) :-
+    R,
+    teste( LR ).
+
+insercao( Termo ) :-
+    assert( Termo ).
+insercao( Termo ) :-
+    retract( Termo ),!,fail.
+
+remover( Termo ) :-
+    retract( Termo ).
+remover( Termo ) :-
+    assert( Termo ),!,fail.
+
+
+apagaNulo(servico(S, D, I, C)) :- I \= xpto1, retract(servico(S, D, xpto1, C)).
+apagaNulo(servico(S, D, I, C)) :- D \= xpto2, retract(servico(S, xpto2, I, C)).
+apagaNulo(servico(S, D, I, C)) :- C \= xpto3, retract(servico(S, D, I, xpto3)).
+
+apagaNulo(utente(U, N, I, M)) :- M \= xptoc, retract(utente(U, N, I, xptoc)).
+apagaNulo(utente(U, N, I, M)) :- I \= xptoi, retract(utente(U, N, xptoi, M)).
+
+apagaNulo(consulta(D, U, S, C)) :- C \= xptop, retract(consulta(D, U, S, xptop)).
+apagaNulo(consulta(D, U, S, C)) :- S \= xptos, retract(consulta(D, U, xptos, C)).
+apagaNulo(consulta(D, U, S, C)) :- D \= xptod, retract(consulta(xptod, U, S, C)).
+
+
+adicionar(T) :- removeNulo(T), adicionar(T).
+adicionar(T) :- findall(I, +T :: I, L), insercao(T), teste(L).
+
+eliminar(T) :- findall(I, -T :: I, L), remover(T), teste(L).
 
 solucoes( X,Y,Z ) :-
     findall( X,Y,Z ).
@@ -34,6 +66,11 @@ demo( Questao, falso ) :-
 demo( Questao,desconhecido ) :-
     nao( Questao ),
     nao( -Questao ).
+
+evolucao( Termo ) :-
+    solucoes( Invariante,+Termo::Invariante,Lista ),
+    insercao( Termo ),
+    teste( Lista ).
 
 
 % BASE DE CONHECIMENTO SOBRE SERVIÇOS ------------------------------------------------------------------------------------------
@@ -155,9 +192,8 @@ utente(11,noemia_ferreira, 18, xptoc).
 utente(12,carlota_santos, xptoi, viana_do_castelo).
 
 excecao( utente( U,N,I,M ) ) :- utente(U,N,I,xptoc).
-excecao( utente( U,N,I,M ) ) :- utente(U,N,xptoi,M).
-
 nulo(xptoc).
+excecao( utente( U,N,I,M ) ) :- utente(U,N,xptoi,M).
 nulo(xptoi).
 
 % Conhecimento Imperfeito Impreciso
@@ -217,9 +253,9 @@ consulta(data(31,12,2015), 15, 2, xptop).
 consulta(data(27,07,2015), 3, xptos, 30).
 consulta(xptod, 16, 17, 20).
 
-excecao( utente( D,U,S,xptop ) ) :- utente(D,U,S,xptop).
-excecao( utente( D,U,xptos,30 ) ) :- utente(D,U,xptos,30).
-excecao( utente( xptod,U,S,20 ) ) :- utente(xptod,U,S,20).
+excecao( consulta( D,U,S,xptop ) ) :- consulta(D,U,S,xptop).
+excecao( consulta( D,U,xptos,30 ) ) :- consulta(D,U,xptos,30).
+excecao( consulta( xptod,U,S,20 ) ) :- consulta(xptod,U,S,20).
 
 nulo(xptop).
 nulo(xptos).
