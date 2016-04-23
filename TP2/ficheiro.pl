@@ -93,18 +93,26 @@ excecao(servico(15,radiologia,hospital_viana_do_castelo,viana_do_castelo)).
 excecao(servico(15,radiologia,hospital_viana_do_castelo,braga)).
 
 
-
 %Conhecimento imperfeito interdito
 
-+servico( S,D,I,C ) :: (solucoes( (S,Ds,I,C),(servico(16,Ds,hospital_viana_do_castelo,viana_do_castelo),nao(nulo(Ds))),S ),
+excecao(servico(16, Ds, hospital_viana_do_castelo, viana_do_castelo)).
+
++servico( 16, Ds, hospital_viana_do_castelo, viana_do_castelo ) :: solucoes( (servico(16, Ds, hospital_viana_do_castelo, viana_do_castelo)),
+                  (servico(16, Ds, hospital_viana_do_castelo, viana_do_castelo),S),
                   comprimento( S,N ), N == 0 
                   ).
 
-+servico( S,D,I,C ) :: (solucoes( (S,D,Is,C),(servico(17,psiquiatria,Is,viana_do_castelo),nao(nulo(Is))),S ),
+excecao(servico(17,psiquiatria,Is,viana_do_castelo)).
+
++servico(17,psiquiatria,Is,viana_do_castelo) :: solucoes( (servico(17,psiquiatria,Is,viana_do_castelo)),
+                  (servico(17,psiquiatria,Is,viana_do_castelo),S),
                   comprimento( S,N ), N == 0 
                   ).
 
-+servico( S,D,I,C ) :: (solucoes( (S,D,I,Cs),(servico(18,oncologia,ipo_coimbra,Cs),nao(nulo(Cs))),S ),
+excecao(servico(18,oncologia,ipo_coimbra,Cs)).
+
++servico(18,oncologia,ipo_coimbra,Cs) :: solucoes( (servico(18,oncologia,ipo_coimbra,Cs)),
+                  (servico(18,oncologia,ipo_coimbra,Cs),S),
                   comprimento( S,N ), N == 0 
                   ).
 
@@ -237,10 +245,14 @@ excecao(consulta(data(23,10,2015), 8, 14, 35)).
 excecao(consulta(data(30,01,2016), 5, 15, C)).
 +consulta( data(30,01,2016),5,15,C ) :: solucoes( (consulta(data(30,01,2016),5,15,C )),(consulta(data(30,01,2016),5,15,C ),S),
                   comprimento( S,N ), N == 0 
+                  ).
+
 excecao(consulta(data(07,02,2016), 1, S, 70)).
 +consulta( data(07,02,2016), 1, S, 70 ) :: solucoes( (consulta(data(07,02,2016), 1, S, 70)),(consulta(data(07,02,2016), 1, S, 70),S),
                   comprimento( S,N ), N == 0 
+                  ).
 
 excecao(consulta(D, 13, 18, 50)).
 +consulta( D, 13, 18, 50 ) :: solucoes( (consulta(D, 13, 18, 50)),(consulta(D, 13, 18, 50),S),
                   comprimento( S,N ), N == 0 
+                  ).
