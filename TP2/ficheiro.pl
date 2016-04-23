@@ -146,8 +146,8 @@ utente(20,patricia_afonso, 23, viana_do_castelo).
 utente(11,noemia_ferreira, 18, xptoc).
 utente(12,carlota_santos, xptoi, viana_do_castelo).
 
-excecao( utente( U,N,I,M ) ) :- utente (U,N,I,xptoc).
-excecao( utente( U,N,I,M ) ) :- utente (U,N,xptoi,M).
+excecao( utente( U,N,I,M ) ) :- utente(U,N,I,xptoc).
+excecao( utente( U,N,I,M ) ) :- utente(U,N,xptoi,M).
 
 nulo(xptoc).
 nulo(xptoi).
@@ -159,22 +159,26 @@ excecao( utente(13, ana_rodrigues, 22, porto)).
 excecao( utente(13, ana_rodrigues, 23, porto)).
 
 -utente(14,sofia_martins, 15, braga).
-excecao( utente(14, sofia_martins, 15, vila_real).
-excecao( utente(14, sofia_martins, 15, aveiro).
+excecao( utente(14, sofia_martins, 15, vila_real)).
+excecao( utente(14, sofia_martins, 15, aveiro)).
 
 % Conhecimento Imperfeito Interdito
 
-+utente( U,N,I,M ) :: (solucoes( (U,N,I,M),(utente(15,miguel_belo,I,viana_do_castelo),nao(nulo(I))),S ),
+excecao( utente(15,miguel_belo,I, viana_do_castelo)).
+
++utente( 15,miguel_belo,I,viana_do_castelo ) :: solucoes( (utente(15,miguel_belo,I,viana_do_castelo)),(utente(15,miguel_belo,I,viana_do_castelo),S),
                   comprimento( S,N ), N == 0 
                   ).
 
 
-+utente( U,N,I,M ) :: (solucoes( (U,N,I,M),(utente(16,guilherme_cabral,69,M),nao(nulo(M))),S ),
+excecao( utente(16,guilherme_cabral,69,M)).
+
++utente( 16,guilherme_cabral,69,M ) :: solucoes( (utente(16,guilherme_cabral,69,M)),(utente(16,guilherme_cabral,69,M),S),
                   comprimento( S,N ), N == 0 
-                  ).
+                  )
 
 
-% BASE DE CONHECIMENTO SOBRE AS CONSULTAS
+% BASE DE CONHECIMENTO SOBRE AS CONSULTAS ------------------------------------------------------------------------------------------------------
 % consulta: Data, #IdUt,#Serv,Custo -> {V,F,D}
 
 -consulta( D,U,S,C ) :-
@@ -183,7 +187,7 @@ excecao( utente(14, sofia_martins, 15, aveiro).
 
 -data( D,M,A ) :- 
     nao( data(D,M,A) ),
-    nao( excecao( data (D,M,A))).
+    nao( excecao( data(D,M,A))).
 
 % Invariante Estrutural:  nao permitir a insercao de conhecimento
 %                         repetido
@@ -197,15 +201,46 @@ excecao( utente(14, sofia_martins, 15, aveiro).
 
 consulta(data(20,03,2016), 4, 1, 25).
 consulta(data(16,05,2015), 7, 5, 30).
-consulta(data(15,08,2015), 13, 18, 50).
-consulta(data(30,01,2016), 5, 15, 30).
-consulta(data(07,02,2016), 1, 12, 70).
 
 
-consulta(data(02,09,2015), 20, 8, 20).
-consulta(data(18,10,2015), 17, 10, 40).
-consulta(data(23,11,2015), 8, 14, 35).
-consulta(data(31,12,2015), 15, 2, 65).
-consulta(data(27,07,2015), 3, 3, 30).
-consulta(data(05,06,2015), 16, 17, 20).
+% Conhecimento Imperfeito Incerto(Parametros desconhecidos)
 
+consulta(data(31,12,2015), 15, 2, xptop).
+consulta(data(27,07,2015), 3, xptos, 30).
+consulta(xptod, 16, 17, 20).
+
+excecao( utente( D,U,S,xptop ) ) :- utente(D,U,S,xptop).
+excecao( utente( D,U,xptos,30 ) ) :- utente(D,U,xptos,30).
+excecao( utente( xptod,U,S,20 ) ) :- utente(xptod,U,S,20).
+
+nulo(xptop).
+nulo(xptos).
+nulo(xptod).
+
+
+% Conhecimento Imperfeito Impreciso
+
+-consulta(data(02,09,2015), 20, 8, 20).
+excecao(consulta(data(02,09,2015), 20, 8, 30)).
+excecao(consulta(data(02,09,2015), 20, 8, 40)).
+
+-consulta(data(18,10,2015), 17, 10, 40).
+excecao(consulta(data(18,10,2015), 17, 6, 40)).
+excecao(consulta(data(18,10,2015), 17, 9, 40)).
+
+-consulta(data(23,11,2015), 8, 14, 35).
+excecao(consulta(data(23,12,2015), 8, 14, 35)).
+excecao(consulta(data(23,10,2015), 8, 14, 35)).
+
+% Conhecimento Imperfeito Interdito
+
+excecao(consulta(data(30,01,2016), 5, 15, C)).
++consulta( data(30,01,2016),5,15,C ) :: solucoes( (consulta(data(30,01,2016),5,15,C )),(consulta(data(30,01,2016),5,15,C ),S),
+                  comprimento( S,N ), N == 0 
+excecao(consulta(data(07,02,2016), 1, S, 70)).
++consulta( data(07,02,2016), 1, S, 70 ) :: solucoes( (consulta(data(07,02,2016), 1, S, 70)),(consulta(data(07,02,2016), 1, S, 70),S),
+                  comprimento( S,N ), N == 0 
+
+excecao(consulta(D, 13, 18, 50)).
++consulta( D, 13, 18, 50 ) :: solucoes( (consulta(D, 13, 18, 50)),(consulta(D, 13, 18, 50),S),
+                  comprimento( S,N ), N == 0 
